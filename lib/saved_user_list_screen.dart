@@ -79,8 +79,12 @@ class DatabaseHelper {
   Future<List<User>> getUsers() async {
     final db = await database;
     final List<Map<String, dynamic>> userMaps = await db.query(tableName);
-    return userMaps.map((map) => User.fromMap(map)).toList();
+    print('Retrieved user maps from database: $userMaps');
+    final List<User> users = userMaps.map((map) => User.fromMap(map)).toList();
+    print('Parsed users from retrieved maps: $users');
+    return users;
   }
+
 }
 
 class SavedUserListScreen extends StatefulWidget {
@@ -101,11 +105,13 @@ class _SavedUserListScreenState extends State<SavedUserListScreen> {
     final List<User> users = await DatabaseHelper.instance.getUsers();
     setState(() {
       savedUsers = users;
+      print('Fetched saved users: $savedUsers');
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print('Building SavedUserListScreen with users: $savedUsers');
     return Scaffold(
       appBar: AppBar(
         title: Text('Saved User List'),
